@@ -1,0 +1,473 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans)}
+.app{min-height:600px;background:var(--color-background-tertiary);padding:1rem}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1.25rem}
+.btn{padding:8px 16px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-primary);font-size:13px;cursor:pointer;font-family:var(--font-sans)}
+.btn:hover{background:var(--color-background-secondary)}
+.btn-primary{background:#1D9E75;color:#fff;border-color:#0F6E56}
+.btn-primary:hover{background:#0F6E56}
+.btn-danger{background:#E24B4A;color:#fff;border-color:#A32D2D}
+.btn-danger:hover{background:#A32D2D}
+.btn-sm{padding:4px 10px;font-size:12px}
+input,select{font-family:var(--font-sans);font-size:13px;padding:7px 10px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:var(--color-background-primary);color:var(--color-text-primary);width:100%}
+input:focus,select:focus{outline:none;border-color:#1D9E75}
+label{font-size:12px;color:var(--color-text-secondary);margin-bottom:4px;display:block}
+.badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:500}
+.badge-green{background:#EAF3DE;color:#3B6D11}
+.badge-blue{background:#E6F1FB;color:#185FA5}
+.badge-amber{background:#FAEEDA;color:#854F0B}
+.toast{position:fixed;top:1rem;right:1rem;background:#1D9E75;color:#fff;padding:10px 16px;border-radius:var(--border-radius-md);font-size:13px;z-index:999;opacity:0;transition:opacity 0.3s}
+.toast.show{opacity:1}
+.grid-wrap{overflow-x:auto;margin-top:1rem}
+table{width:100%;border-collapse:collapse;font-size:12px;min-width:900px}
+th{background:#085041;color:#E1F5EE;padding:8px 6px;text-align:left;font-weight:500;position:sticky;top:0;white-space:nowrap}
+td{padding:6px 6px;border-bottom:0.5px solid var(--color-border-tertiary);color:var(--color-text-primary)}
+tr:hover td{background:var(--color-background-secondary)}
+.period-cell{background:#E1F5EE;color:#085041;border-radius:4px;padding:2px 5px;font-size:11px}
+.recess-cell{background:#FAEEDA;color:#854F0B;border-radius:4px;padding:2px 5px;font-size:11px;font-weight:500}
+.teacher-widget{max-width:400px;margin:0 auto}
+.period-card{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:10px 12px;margin-bottom:8px;display:flex;align-items:center;gap:10px}
+.period-num{width:36px;height:36px;border-radius:50%;background:#E1F5EE;color:#085041;display:flex;align-items:center;justify-content:center;font-weight:500;font-size:13px;flex-shrink:0}
+.recess-period{background:#FAEEDA}
+.recess-period .period-num{background:#FAC775;color:#412402}
+.tab-bar{display:flex;gap:4px;margin-bottom:1rem;border-bottom:0.5px solid var(--color-border-tertiary);padding-bottom:0}
+.tab{padding:8px 14px;font-size:13px;cursor:pointer;color:var(--color-text-secondary);border-bottom:2px solid transparent;margin-bottom:-1px;background:none;border-top:none;border-left:none;border-right:none;font-family:var(--font-sans)}
+.tab.active{color:#1D9E75;border-bottom-color:#1D9E75;font-weight:500}
+.section-title{font-size:15px;font-weight:500;color:var(--color-text-primary);margin-bottom:12px}
+.meta-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.screen{display:none}
+.screen.active{display:block}
+.login-wrap{max-width:340px;margin:4rem auto}
+.logo-area{text-align:center;margin-bottom:2rem}
+.logo-icon{width:56px;height:56px;background:#085041;border-radius:var(--border-radius-lg);display:flex;align-items:center;justify-content:center;margin:0 auto 12px;color:#E1F5EE;font-size:28px}
+.logo-title{font-size:20px;font-weight:500;color:var(--color-text-primary)}
+.logo-sub{font-size:13px;color:var(--color-text-secondary);margin-top:4px}
+.form-group{margin-bottom:12px}
+.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:1rem}
+.stat-card{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px;text-align:center}
+.stat-num{font-size:22px;font-weight:500;color:var(--color-text-primary)}
+.stat-label{font-size:11px;color:var(--color-text-secondary);margin-top:2px}
+.pill-time{background:var(--color-background-secondary);color:var(--color-text-secondary);font-size:11px;padding:2px 7px;border-radius:20px}
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.4);display:none;align-items:center;justify-content:center;z-index:100}
+.modal-bg.open{display:flex}
+.modal{background:var(--color-background-primary);border-radius:var(--border-radius-lg);padding:1.5rem;width:100%;max-width:420px;border:0.5px solid var(--color-border-secondary)}
+.modal-title{font-size:15px;font-weight:500;margin-bottom:1rem;color:var(--color-text-primary)}
+.gen-pass{font-family:var(--font-mono);background:var(--color-background-secondary);padding:8px 12px;border-radius:var(--border-radius-md);font-size:14px;letter-spacing:1px;color:#185FA5;text-align:center;margin:8px 0}
+.row-action{display:flex;gap:6px}
+.csv-area{border:1.5px dashed var(--color-border-secondary);border-radius:var(--border-radius-md);padding:2rem;text-align:center;cursor:pointer;color:var(--color-text-secondary);font-size:13px;transition:border-color 0.2s}
+.csv-area:hover{border-color:#1D9E75;color:#1D9E75}
+.top-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;padding-bottom:1rem;border-bottom:0.5px solid var(--color-border-tertiary)}
+.top-bar-title{font-size:16px;font-weight:500;color:var(--color-text-primary)}
+.teacher-header{background:#085041;color:#E1F5EE;border-radius:var(--border-radius-lg);padding:1rem;margin-bottom:1rem;text-align:center}
+.teacher-name-big{font-size:18px;font-weight:500}
+.teacher-sub{font-size:12px;opacity:0.8;margin-top:2px}
+.day-badge{display:inline-block;background:#1D9E75;color:#fff;border-radius:20px;padding:3px 10px;font-size:11px;margin-top:6px}
+.search-row{display:flex;gap:8px;margin-bottom:10px}
+.search-row input{flex:1}
+.no-data{text-align:center;padding:3rem;color:var(--color-text-secondary);font-size:13px}
+</style>
+
+<div class="app" id="app">
+
+<div id="screen-login" class="screen active">
+  <div class="login-wrap">
+    <div class="logo-area">
+      <div class="logo-icon"><i class="ti ti-school" aria-hidden="true"></i></div>
+      <div class="logo-title">School Timetable</div>
+      <div class="logo-sub">Sign in to continue</div>
+    </div>
+    <div class="card">
+      <div class="form-group">
+        <label>Role</label>
+        <select id="login-role">
+          <option value="admin">Admin</option>
+          <option value="teacher">Teacher (Mobile Number)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label id="login-id-label">Username</label>
+        <input type="text" id="login-id" placeholder="Enter username or mobile number">
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="login-pass" placeholder="Enter password">
+      </div>
+      <button class="btn btn-primary" style="width:100%;margin-top:4px" onclick="doLogin()">Sign in <i class="ti ti-arrow-right" aria-hidden="true"></i></button>
+      <div id="login-error" style="color:#E24B4A;font-size:12px;margin-top:8px;text-align:center;display:none"></div>
+      <div style="font-size:11px;color:var(--color-text-secondary);margin-top:12px;text-align:center">
+        Demo — Admin: admin / admin123 &nbsp;|&nbsp; Teacher: 9876543210 / pass123
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="screen-admin" class="screen">
+  <div class="top-bar">
+    <div class="top-bar-title"><i class="ti ti-layout-dashboard" aria-hidden="true" style="font-size:18px;vertical-align:-2px;margin-right:6px;color:#1D9E75"></i>Admin Panel</div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <span class="badge badge-green" id="admin-date-badge"></span>
+      <button class="btn btn-sm" onclick="logout()"><i class="ti ti-logout" aria-hidden="true"></i> Logout</button>
+    </div>
+  </div>
+
+  <div class="stat-row">
+    <div class="stat-card">
+      <div class="stat-num" id="stat-teachers">0</div>
+      <div class="stat-label">Teachers</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">8</div>
+      <div class="stat-label">Periods / Day</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" id="stat-updated">Now</div>
+      <div class="stat-label">Last sync</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="tab-bar">
+      <button class="tab active" onclick="switchTab('grid')">Timetable Grid</button>
+      <button class="tab" onclick="switchTab('teachers')">Manage Teachers</button>
+      <button class="tab" onclick="switchTab('upload')">Upload CSV</button>
+    </div>
+
+    <div id="tab-grid" class="tab-content">
+      <div class="meta-row">
+        <span class="section-title">Daily Timetable — All Teachers</span>
+        <div class="search-row" style="margin:0">
+          <input type="text" id="search-teacher" placeholder="Search by name or mobile..." style="width:200px" oninput="renderGrid()">
+        </div>
+      </div>
+      <div class="grid-wrap">
+        <table id="timetable-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Mobile No.</th>
+              <th>Teacher Name</th>
+              <th>Period 1</th>
+              <th>Period 2</th>
+              <th>Period 3</th>
+              <th>Period 4</th>
+              <th>Recess</th>
+              <th>Period 5</th>
+              <th>Period 6</th>
+              <th>Period 7</th>
+              <th>Period 8</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="timetable-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div id="tab-teachers" class="tab-content" style="display:none">
+      <div class="meta-row">
+        <span class="section-title">Teacher Accounts</span>
+        <button class="btn btn-primary btn-sm" onclick="openAddTeacher()"><i class="ti ti-plus" aria-hidden="true"></i> Add Teacher</button>
+      </div>
+      <div class="grid-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Mobile (Login ID)</th>
+              <th>Teacher Name</th>
+              <th>Password</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="teachers-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div id="tab-upload" class="tab-content" style="display:none">
+      <div class="section-title">Upload CSV / Update Schedule</div>
+      <p style="font-size:13px;color:var(--color-text-secondary);margin-bottom:1rem">Upload a CSV file with columns: mobile, name, p1, p2, p3, p4, recess, p5, p6, p7, p8. Existing data will be replaced.</p>
+      <div class="csv-area" id="csv-drop" onclick="document.getElementById('csv-input').click()" ondragover="event.preventDefault()" ondrop="handleDrop(event)">
+        <i class="ti ti-upload" aria-hidden="true" style="font-size:32px;margin-bottom:8px;display:block"></i>
+        Click or drag a CSV file here
+      </div>
+      <input type="file" id="csv-input" accept=".csv" style="display:none" onchange="handleCSV(this.files[0])">
+      <div style="margin-top:1rem">
+        <div class="section-title" style="font-size:13px;margin-bottom:8px">Or paste CSV data directly:</div>
+        <textarea id="csv-paste" rows="6" style="width:100%;font-family:var(--font-mono);font-size:12px;padding:8px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:var(--color-background-primary);color:var(--color-text-primary);resize:vertical" placeholder="mobile,name,p1,p2,p3,p4,recess,p5,p6,p7,p8&#10;9876543210,Amit Sharma,Math 10A,Science 9B,Free,English 11,—,Hindi 8C,Math 9A,Free,Science 10B"></textarea>
+        <button class="btn btn-primary btn-sm" style="margin-top:8px" onclick="parsePastedCSV()"><i class="ti ti-check" aria-hidden="true"></i> Apply CSV Data</button>
+      </div>
+      <div style="margin-top:1.5rem;padding:1rem;background:var(--color-background-secondary);border-radius:var(--border-radius-md)">
+        <div style="font-size:13px;font-weight:500;margin-bottom:6px">Sample CSV format</div>
+        <pre style="font-size:11px;color:var(--color-text-secondary);overflow-x:auto">mobile,name,p1,p2,p3,p4,recess,p5,p6,p7,p8
+9876543210,Amit Sharma,Math 10A,Science 9B,Free,Eng 11,—,Hindi 8C,Math 9A,Free,Sci 10B
+9876543211,Priya Singh,Hindi 9A,Free,Math 8B,Sci 10A,—,Eng 9B,Hindi 10,Math 11,Free</pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="screen-teacher" class="screen">
+  <div class="teacher-widget">
+    <div class="teacher-header">
+      <div style="font-size:32px;margin-bottom:4px"><i class="ti ti-user-circle" aria-hidden="true"></i></div>
+      <div class="teacher-name-big" id="t-name-display">—</div>
+      <div class="teacher-sub" id="t-mobile-display">—</div>
+      <div class="day-badge" id="t-day-display">—</div>
+    </div>
+    <div id="teacher-periods"></div>
+    <button class="btn" style="width:100%;margin-top:8px" onclick="logout()"><i class="ti ti-logout" aria-hidden="true"></i> Sign out</button>
+  </div>
+</div>
+
+</div>
+
+<div class="modal-bg" id="modal-add">
+  <div class="modal">
+    <div class="modal-title"><i class="ti ti-user-plus" aria-hidden="true" style="margin-right:6px;color:#1D9E75"></i>Add New Teacher</div>
+    <div class="form-group">
+      <label>Teacher Name</label>
+      <input type="text" id="new-name" placeholder="Full name">
+    </div>
+    <div class="form-group">
+      <label>Mobile Number (Login ID)</label>
+      <input type="text" id="new-mobile" placeholder="10-digit mobile number" maxlength="10">
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <div style="display:flex;gap:6px">
+        <input type="text" id="new-pass" placeholder="Set password">
+        <button class="btn btn-sm" onclick="genPass()"><i class="ti ti-refresh" aria-hidden="true"></i> Generate</button>
+      </div>
+      <div class="gen-pass" id="gen-pass-display" style="display:none"></div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:1rem;justify-content:flex-end">
+      <button class="btn btn-sm" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary btn-sm" onclick="addTeacher()">Add Teacher</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const DAYS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const PERIOD_TIMES = {p1:'8:00–8:45',p2:'8:45–9:30',p3:'9:30–10:15',p4:'10:15–11:00',recess:'11:00–11:20',p5:'11:20–12:05',p6:'12:05–12:50',p7:'12:50–1:35',p8:'1:35–2:20'};
+const PERIOD_LABELS = {p1:'Period 1',p2:'Period 2',p3:'Period 3',p4:'Period 4',recess:'Recess',p5:'Period 5',p6:'Period 6',p7:'Period 7',p8:'Period 8'};
+
+const ADMINS = [{id:'admin',pass:'admin123'}];
+
+let DB = {
+  teachers: [
+    {mobile:'9876543210',name:'Amit Sharma',pass:'pass123',timetable:{p1:'Math 10A',p2:'Science 9B',p3:'Free',p4:'English 11',recess:'—',p5:'Hindi 8C',p6:'Math 9A',p7:'Free',p8:'Science 10B'}},
+    {mobile:'9876543211',name:'Priya Singh',pass:'teach456',timetable:{p1:'Hindi 9A',p2:'Free',p3:'Math 8B',p4:'Science 10A',recess:'—',p5:'English 9B',p6:'Hindi 10',p7:'Math 11',p8:'Free'}},
+    {mobile:'9876543212',name:'Rajesh Kumar',pass:'raj789',timetable:{p1:'Physics 11',p2:'Chem 10',p3:'Physics 12',p4:'Free',recess:'—',p5:'Chem 11',p6:'Physics 10',p7:'Free',p8:'Chem 12'}},
+    {mobile:'9876543213',name:'Sunita Verma',pass:'sun321',timetable:{p1:'English 8',p2:'English 9',p3:'Free',p4:'English 10',recess:'—',p5:'English 12',p6:'Free',p7:'English 11',p8:'English 8B'}},
+    {mobile:'9876543214',name:'Manoj Patel',pass:'man654',timetable:{p1:'History 9',p2:'Geo 10',p3:'History 10',p4:'Free',recess:'—',p5:'Civics 11',p6:'History 12',p7:'Geo 9',p8:'Free'}},
+    {mobile:'9876543215',name:'Deepa Nair',pass:'dee987',timetable:{p1:'Free',p2:'Biology 11',p3:'Biology 10',p4:'Bio 12',recess:'—',p5:'Free',p6:'Biology 9',p7:'Biology 11B',p8:'Free'}},
+    {mobile:'9876543216',name:'Vikram Rao',pass:'vik111',timetable:{p1:'Computer 10',p2:'Computer 11',p3:'Free',p4:'Computer 9',recess:'—',p5:'Computer 12',p6:'Free',p7:'Computer 10B',p8:'Computer 8'}},
+    {mobile:'9876543217',name:'Anita Joshi',pass:'ani222',timetable:{p1:'Art 8',p2:'Free',p3:'Art 9',p4:'Art 10',recess:'—',p5:'Art 11',p6:'Art 8B',p7:'Free',p8:'Art 12'}},
+    {mobile:'9876543218',name:'Suresh Mehta',pass:'sur333',timetable:{p1:'PE 9',p2:'PE 10',p3:'PE 8',p4:'Free',recess:'—',p5:'PE 11',p6:'PE 12',p7:'Free',p8:'PE 9B'}},
+    {mobile:'9876543219',name:'Kavita Sharma',pass:'kav444',timetable:{p1:'Music 8',p2:'Music 9',p3:'Free',p4:'Music 10',recess:'—',p5:'Music 8B',p6:'Free',p7:'Music 11',p8:'Music 12'}},
+  ]
+};
+
+let currentUser = null;
+
+document.getElementById('login-role').addEventListener('change', function(){
+  document.getElementById('login-id-label').textContent = this.value==='admin'?'Username':'Mobile Number';
+  document.getElementById('login-id').placeholder = this.value==='admin'?'Enter username':'10-digit mobile number';
+});
+
+function doLogin(){
+  const role = document.getElementById('login-role').value;
+  const id = document.getElementById('login-id').value.trim();
+  const pass = document.getElementById('login-pass').value.trim();
+  const err = document.getElementById('login-error');
+  err.style.display='none';
+  if(!id||!pass){err.textContent='Please enter credentials.';err.style.display='block';return;}
+  if(role==='admin'){
+    const a = ADMINS.find(x=>x.id===id&&x.pass===pass);
+    if(!a){err.textContent='Invalid admin credentials.';err.style.display='block';return;}
+    currentUser={role:'admin'};
+    showScreen('admin');
+    renderGrid();renderTeachersTable();
+    document.getElementById('admin-date-badge').textContent=DAYS[new Date().getDay()]+', '+new Date().toLocaleDateString('en-IN');
+    document.getElementById('stat-teachers').textContent=DB.teachers.length;
+  } else {
+    const t = DB.teachers.find(x=>x.mobile===id&&x.pass===pass);
+    if(!t){err.textContent='Invalid mobile number or password.';err.style.display='block';return;}
+    currentUser={role:'teacher',data:t};
+    showScreen('teacher');
+    renderTeacherView(t);
+  }
+}
+
+function logout(){currentUser=null;showScreen('login');document.getElementById('login-pass').value='';}
+
+function showScreen(s){
+  document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));
+  document.getElementById('screen-'+s).classList.add('active');
+}
+
+function switchTab(t){
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(x=>x.style.display='none');
+  event.target.classList.add('active');
+  document.getElementById('tab-'+t).style.display='block';
+}
+
+function renderGrid(){
+  const q = (document.getElementById('search-teacher').value||'').toLowerCase();
+  const tbody = document.getElementById('timetable-body');
+  let rows = DB.teachers;
+  if(q) rows = rows.filter(t=>t.name.toLowerCase().includes(q)||t.mobile.includes(q));
+  tbody.innerHTML = rows.map((t,i)=>`<tr>
+    <td>${i+1}</td>
+    <td><code style="font-size:11px">${t.mobile}</code></td>
+    <td style="font-weight:500;min-width:120px">${t.name}</td>
+    ${['p1','p2','p3','p4'].map(p=>`<td><span class="period-cell">${t.timetable[p]||'—'}</span></td>`).join('')}
+    <td><span class="recess-cell">${t.timetable.recess||'Recess'}</span></td>
+    ${['p5','p6','p7','p8'].map(p=>`<td><span class="period-cell">${t.timetable[p]||'—'}</span></td>`).join('')}
+    <td><div class="row-action">
+      <button class="btn btn-sm" onclick="editRow(${DB.teachers.indexOf(t)})" title="Edit"><i class="ti ti-edit" aria-hidden="true"></i></button>
+    </div></td>
+  </tr>`).join('');
+  if(!rows.length) tbody.innerHTML='<tr><td colspan="13" class="no-data">No teachers found</td></tr>';
+}
+
+function renderTeachersTable(){
+  const tbody = document.getElementById('teachers-body');
+  tbody.innerHTML = DB.teachers.map((t,i)=>`<tr>
+    <td>${i+1}</td>
+    <td><code style="font-size:11px">${t.mobile}</code></td>
+    <td style="font-weight:500">${t.name}</td>
+    <td><span class="badge badge-blue">${t.pass}</span></td>
+    <td><span class="badge badge-green">Active</span></td>
+    <td><div class="row-action">
+      <button class="btn btn-sm" onclick="resetPass(${i})" title="Reset Password"><i class="ti ti-key" aria-hidden="true"></i></button>
+      <button class="btn btn-danger btn-sm" onclick="removeTeacher(${i})" title="Remove"><i class="ti ti-trash" aria-hidden="true"></i></button>
+    </div></td>
+  </tr>`).join('');
+}
+
+function renderTeacherView(t){
+  document.getElementById('t-name-display').textContent = t.name;
+  document.getElementById('t-mobile-display').textContent = t.mobile;
+  const d = new Date();
+  document.getElementById('t-day-display').textContent = DAYS[d.getDay()]+' — '+d.toLocaleDateString('en-IN');
+  const pOrder = ['p1','p2','p3','p4','recess','p5','p6','p7','p8'];
+  document.getElementById('teacher-periods').innerHTML = pOrder.map(p=>{
+    const isR = p==='recess';
+    return `<div class="period-card ${isR?'recess-period':''}">
+      <div class="period-num">${isR?'☕':p.replace('p','')}</div>
+      <div style="flex:1">
+        <div style="font-weight:500;font-size:13px;color:var(--color-text-primary)">${PERIOD_LABELS[p]}</div>
+        <div style="font-size:12px;color:var(--color-text-secondary);margin-top:1px">${t.timetable[p]||'—'} &nbsp;<span class="pill-time">${PERIOD_TIMES[p]}</span></div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function openAddTeacher(){
+  document.getElementById('new-name').value='';
+  document.getElementById('new-mobile').value='';
+  document.getElementById('new-pass').value='';
+  document.getElementById('gen-pass-display').style.display='none';
+  document.getElementById('modal-add').classList.add('open');
+}
+function closeModal(){document.getElementById('modal-add').classList.remove('open');}
+
+function genPass(){
+  const chars='ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789';
+  const p = Array.from({length:8},()=>chars[Math.floor(Math.random()*chars.length)]).join('');
+  document.getElementById('new-pass').value=p;
+  document.getElementById('gen-pass-display').textContent=p;
+  document.getElementById('gen-pass-display').style.display='block';
+}
+
+function addTeacher(){
+  const name=document.getElementById('new-name').value.trim();
+  const mobile=document.getElementById('new-mobile').value.trim();
+  const pass=document.getElementById('new-pass').value.trim();
+  if(!name||!mobile||!pass){showToast('Please fill all fields.');return;}
+  if(!/^\d{10}$/.test(mobile)){showToast('Mobile must be 10 digits.');return;}
+  if(DB.teachers.find(x=>x.mobile===mobile)){showToast('Mobile already exists.');return;}
+  DB.teachers.push({mobile,name,pass,timetable:{p1:'',p2:'',p3:'',p4:'',recess:'—',p5:'',p6:'',p7:'',p8:''}});
+  closeModal();renderGrid();renderTeachersTable();
+  document.getElementById('stat-teachers').textContent=DB.teachers.length;
+  showToast('Teacher added: '+name);
+}
+
+function removeTeacher(i){
+  if(!confirm('Remove '+DB.teachers[i].name+'?'))return;
+  DB.teachers.splice(i,1);renderGrid();renderTeachersTable();
+  document.getElementById('stat-teachers').textContent=DB.teachers.length;
+  showToast('Teacher removed.');
+}
+
+function resetPass(i){
+  const chars='ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789';
+  const p=Array.from({length:8},()=>chars[Math.floor(Math.random()*chars.length)]).join('');
+  DB.teachers[i].pass=p;renderTeachersTable();
+  showToast('New password for '+DB.teachers[i].name+': '+p);
+}
+
+function editRow(i){
+  const t=DB.teachers[i];
+  const sub=prompt('Edit Period 1 for '+t.name+' (current: '+t.timetable.p1+')',t.timetable.p1);
+  if(sub===null)return;
+  t.timetable.p1=sub;renderGrid();
+  showToast('Timetable updated for '+t.name);
+}
+
+function handleDrop(e){e.preventDefault();const f=e.dataTransfer.files[0];if(f)handleCSV(f);}
+
+function handleCSV(file){
+  if(!file)return;
+  const r=new FileReader();
+  r.onload=e=>processCSVText(e.target.result);
+  r.readAsText(file);
+}
+
+function parsePastedCSV(){
+  const txt=document.getElementById('csv-paste').value.trim();
+  if(!txt){showToast('Please paste CSV data.');return;}
+  processCSVText(txt);
+}
+
+function processCSVText(txt){
+  const lines=txt.trim().split('\n').map(l=>l.trim()).filter(Boolean);
+  if(lines.length<2){showToast('CSV must have header + data rows.');return;}
+  const header=lines[0].split(',').map(h=>h.trim().toLowerCase());
+  const cols={mobile:header.indexOf('mobile'),name:header.indexOf('name'),p1:header.indexOf('p1'),p2:header.indexOf('p2'),p3:header.indexOf('p3'),p4:header.indexOf('p4'),recess:header.indexOf('recess'),p5:header.indexOf('p5'),p6:header.indexOf('p6'),p7:header.indexOf('p7'),p8:header.indexOf('p8')};
+  if(cols.mobile<0||cols.name<0){showToast('CSV must have mobile and name columns.');return;}
+  let updated=0,added=0;
+  lines.slice(1).forEach(line=>{
+    const cells=line.split(',').map(c=>c.trim());
+    const mobile=cells[cols.mobile]||'';
+    const name=cells[cols.name]||'';
+    if(!mobile)return;
+    const tt={p1:cols.p1>=0?cells[cols.p1]||'':'' , p2:cols.p2>=0?cells[cols.p2]||'':'' , p3:cols.p3>=0?cells[cols.p3]||'':'' , p4:cols.p4>=0?cells[cols.p4]||'':'' , recess:cols.recess>=0?cells[cols.recess]||'—':'—' , p5:cols.p5>=0?cells[cols.p5]||'':'' , p6:cols.p6>=0?cells[cols.p6]||'':'' , p7:cols.p7>=0?cells[cols.p7]||'':'' , p8:cols.p8>=0?cells[cols.p8]||'':''};
+    const ex=DB.teachers.find(t=>t.mobile===mobile);
+    if(ex){ex.name=name||ex.name;ex.timetable=tt;updated++;}
+    else{DB.teachers.push({mobile,name,pass:'pass'+Math.floor(1000+Math.random()*9000),timetable:tt});added++;}
+  });
+  renderGrid();renderTeachersTable();
+  document.getElementById('stat-teachers').textContent=DB.teachers.length;
+  document.getElementById('stat-updated').textContent=new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
+  showToast(`Sync done — ${updated} updated, ${added} added.`);
+}
+
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+
+document.addEventListener('keydown',e=>{if(e.key==='Enter'&&document.getElementById('screen-login').classList.contains('active'))doLogin();});
+document.getElementById('modal-add').addEventListener('click',function(e){if(e.target===this)closeModal();});
+</script>
